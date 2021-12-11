@@ -1,7 +1,7 @@
 # Drama
 A web3 platform for drama creating
 
-**中文介绍：**
+## **中文介绍：**
 
 基于Dfinity生态的众创剧本平台Drama
   
