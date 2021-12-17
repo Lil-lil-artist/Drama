@@ -1,5 +1,5 @@
 # Drama
-## 基于Dfinity生态的异步艺术创作平台Drama
+## 基于Dfinity生态的异步数字艺术创作平台Drama
 
 ### 项目愿景：
 
