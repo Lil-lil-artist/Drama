@@ -1,5 +1,5 @@
 # Drama
-## Drama, an asynchronous art creation platform based on Dfinity ecosystem
+## Drama, an asynchronous digital art creation platform based on Dfinity ecosystem
 
 ### Project vision:
 
