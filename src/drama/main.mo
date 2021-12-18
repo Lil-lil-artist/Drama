@@ -9,10 +9,11 @@ import Hash "mo:base/Hash";
 import Text "mo:base/Text";
 import Option "mo:base/Option";
 
-import AID "AccountId";
+import AID "./Utils/AccountId";
+import UserDomain "./UserDomain";
 
-import ScriptKillDomain "ScriptKillDomain";
-// import ScriptKillRopositories "ScriptKillRepositories";
+import ScriptKillDomain "./ScriptKillDomain";
+// import ScriptKillRopositories "./ScriptKillRepositories";
 
 
 // import ScriptKillActivity "./script_kill_create/ScriptKillActivity";
@@ -24,12 +25,16 @@ shared(msg) actor class Drama() = this {
 
     public type ActivityID=ScriptKillDomain.ActivityId;
     public type ScriptKillStruct=ScriptKillDomain.ScriptKillStruct;
+     public type UserInfo=UserDomain.UserInfo;
 
     /// ID Generator
     stable var idGenerator : Nat = 1111;  //相当于数据表中Index并且是递增的。也就是说活动Id是由后端生成的。
 
 
-    var activityCache = ScriptKillRopositories.newActivityCache();
+    // var activityCache = ScriptKillRopositories.newActivityCache();
+    // var activityCache = HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash); //保存
+    private var users = HashMap.HashMap<AID.Address, UserInfo>(1, AID.equal, AID.hash);
+    
     // var activityParticipaters=HashMap.HashMap<Principal, Nat64>(0, Principal.equal, Principal.hash); //保存
     // var activityList = List.nil<Card.Card>();
 
@@ -43,6 +48,35 @@ shared(msg) actor class Drama() = this {
     let activityHash=ScriptKillDomain.activityHash;
 
     var activityMap=HashMap.HashMap<ActivityID,ScriptKillStruct>(0,activityEq, activityHash);
+    /**
+     * 创建用户
+     * @return
+     */
+    public shared(msg) func createUser(_firstName: Text, _lastName: Text, _phone:Text,_email:Text, _personalInfo:Text):  async (Bool, Text) {
+        let address = AID.fromPrincipal(msg.caller, null);
+        let addressUserOp = users.get(address);
+        var userInfo :UserInfo ={
+                firstName=_firstName;
+                lastName=_lastName;
+                phone=_phone;
+                email=_email;
+                personalInfo=_personalInfo;
+                createTime=Time.now();
+                address=address;
+            };
+        users.put(address, userInfo);
+        return (true, "");
+    };
+
+
+    /**
+     * 获取用户信息
+     * @return
+     */
+    public shared(msg) func getUser(addr:Principal):  async UserInfo{
+       let address = AID.fromPrincipal(addr, null);
+       return Option.unwrap(users.get(address));
+    };
 
 
     // public type StriptKillDisplayInfoStract{
@@ -77,6 +111,7 @@ shared(msg) actor class Drama() = this {
         // if (from_balance_new > 0) {  //余额足够
 
             let caller =Principal.toText(msg.caller);
+
             let activityId :Nat= getIdAndIncrementOne();
             // var cache = HashMap.HashMap<Text,Nat64>(0,Text.equal,Nat64.hash);
             // cache.put(caller,value); //发起者也要加入到赞助者名单中
@@ -85,6 +120,8 @@ shared(msg) actor class Drama() = this {
 
             // let pa
 
+        var _activityVoteParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
+        var _activityElectParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
             var activity :ScriptKillStruct ={
                 activityId=activityId;
                 activitySponsorPrincipal=caller;
@@ -92,6 +129,8 @@ shared(msg) actor class Drama() = this {
                 activityParticipaters=cache;
                 timestamp=Time.now();
 
+                activityVoteParticipaters=_activityVoteParticipaters;
+                activityElectParticipaters=_activityElectParticipaters;
                 scriptName=scriptName;
                 scriptType=scriptType;
                 scriptDescription=scriptDescription;
@@ -167,14 +206,16 @@ shared(msg) actor class Drama() = this {
         var scriptNamenew=Option.unwrap(activity).scriptName;
         var scriptTypeNew=Option.unwrap(activity).scriptType;
         var scriptDescriptionNew=Option.unwrap(activity).scriptDescription;
-
+        var _activityVoteParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
+        var _activityElectParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
         var activityNew :ScriptKillStruct={
                 activityId=activityId;
                 activitySponsorPrincipal=activitySponsorPrincipalNew;
                 totalBalance=balanceNew;
                 activityParticipaters=cacheNew;
                 timestamp=timestampNew;
-
+                activityElectParticipaters=_activityElectParticipaters;
+                activityVoteParticipaters=_activityVoteParticipaters;
                 scriptName=scriptNamenew;
                 scriptType=scriptTypeNew;
                 scriptDescription=scriptDescriptionNew;
@@ -207,11 +248,57 @@ shared(msg) actor class Drama() = this {
      * @param  num 票数
      * @return
     */
-    public shared(msg) func partivipaterVote(to:Principal,num:Nat): async Text{
-
+    public shared(msg) func partivipaterVote(activityId: ActivityID,to: AID.Address, num:Nat64): async Text{
+        var activity =activityMap.get(activityId);
+        if(Option.isNull(activity)){
+            return "";
+        };
+        // let toAddr =Principal.toText(to);
+        var activityElectParticipaters= Option.unwrap(activity).activityElectParticipaters;
+        let total = activityElectParticipaters.get(to);
+        if(Option.isNull(total)){
+            // 没有找到被投票人
+            return "";
+        } else {
+            let caller =Principal.toText(msg.caller);
+            var activityVoteParticipaters = Option.unwrap(activity).activityVoteParticipaters;
+            var voteNum = activityVoteParticipaters.get(caller);
+            if(Option.isNull(total)){
+                var totalNew=Option.unwrap(total)+num;
+                activityVoteParticipaters.put(to, totalNew);
+                var voteNumNew=Option.unwrap(voteNum)+num;
+                activityVoteParticipaters.put(caller, voteNumNew);
+            } else {
+                var totalNew=Option.unwrap(total)+num;
+                activityVoteParticipaters.put(to, totalNew);
+                activityVoteParticipaters.put(caller, num);
+            }
+        };
         Principal.toText(msg.caller);
     };
 
+    /**
+     * 获取最终投票胜出的用户
+     * @param activityId 活动id
+     * @return
+    */
+    public shared(msg)  func getWoteWiner(activityId:ActivityID):  async Text{
+        
+        let activity =activityMap.get(activityId);
+        if(Option.isNull(activity)){
+            return "";
+        };
+        var maxTotal : Nat64 = 0;
+        var winner = "";
+        var activityVoteParticipaters=Option.unwrap(activity).activityVoteParticipaters;
+        for ((k, v)  in activityVoteParticipaters.entries()) {
+            if (v > maxTotal ) {
+                maxTotal:= v;
+                winner := k;
+            }
+        };
+        return winner;
+    };
 
 
 
@@ -264,13 +351,13 @@ shared(msg) actor class Drama() = this {
 
 
 
-    public func greet(name : Text) : async Text {
-        return "Hello, " # name # "!";
-    };
+//     public func greet(name : Text) : async Text {
+//         return "Hello, " # name # "!";
+//     };
 
-   public func dojob(name : Text) : async Text {
-        return "Hello, " # name # "!";
-    };
+//    public func dojob(name : Text) : async Text {
+//         return "Hello, " # name # "!";
+//     };
 
 
 
