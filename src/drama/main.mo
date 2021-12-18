@@ -10,6 +10,7 @@ import Text "mo:base/Text";
 import Option "mo:base/Option";
 
 import AID "./Utils/AccountId";
+import User "./UserDomain";
 
 import ScriptKillDomain "./ScriptKillDomain";
 // import ScriptKillRopositories "./ScriptKillRepositories";
@@ -24,13 +25,15 @@ shared(msg) actor class Drama() = this {
 
     public type ActivityID=ScriptKillDomain.ActivityId;
     public type ScriptKillStruct=ScriptKillDomain.ScriptKillStruct;
+     public type UserInfo=UserDomain.UserInfo;
 
     /// ID Generator
     stable var idGenerator : Nat = 1111;  //相当于数据表中Index并且是递增的。也就是说活动Id是由后端生成的。
 
 
     // var activityCache = ScriptKillRopositories.newActivityCache();
-    var activityCache = HashMap.HashMap<Principal, Nat64>(0, Principal.equal, Principal.hash); //保存
+    var activityCache = HashMap.HashMap<AID.Address, Nat64>(0, AID.equal, AID.hash); //保存
+    private var users = HashMap.HashMap<AID.Address, UserInfo>(1, AID.equal, AID.hash);
     
     // var activityParticipaters=HashMap.HashMap<Principal, Nat64>(0, Principal.equal, Principal.hash); //保存
     // var activityList = List.nil<Card.Card>();
@@ -45,6 +48,34 @@ shared(msg) actor class Drama() = this {
     let activityHash=ScriptKillDomain.activityHash;
 
     var activityMap=HashMap.HashMap<ActivityID,ScriptKillStruct>(0,activityEq, activityHash);
+    /**
+     * 创建用户
+     * @return
+     */
+    public shared(msg) func createUser(_firstName: Text, _lastName: Text, _phone:Text,_email:Text, _personalInfo:Text):  async (Bool, Text) {
+        let address = AID.fromPrincipal(msg.caller, null);
+        let addressUserOp = users.get(address);
+        var userInfo :UserInfo ={
+                firstName=_firstName;
+                lastName=_lastName;
+                phone=_phone;
+                email=_email;
+                personalInfo=_personalInfo;
+                createTime=Time.now();
+            };
+        users.put(address,userInfo);
+        return (true, "");
+    };
+
+
+    /**
+     * 获取用户信息
+     * @return
+     */
+    public shared(msg) func getUser(addr:Principal):  async UserInfo{
+       let address = AID.fromPrincipal(addr, null);
+       users.get(address);
+    };
 
 
     // public type StriptKillDisplayInfoStract{
@@ -79,6 +110,7 @@ shared(msg) actor class Drama() = this {
         // if (from_balance_new > 0) {  //余额足够
 
             let caller =Principal.toText(msg.caller);
+
             let activityId :Nat= getIdAndIncrementOne();
             // var cache = HashMap.HashMap<Text,Nat64>(0,Text.equal,Nat64.hash);
             // cache.put(caller,value); //发起者也要加入到赞助者名单中
@@ -236,7 +268,7 @@ shared(msg) actor class Drama() = this {
      * @param activityId 活动id
      * @return
     */
-    public func getWoteWiner(activityId:ActivityID): Text{
+    public func getWoteWiner(activityId:ActivityID): async Text{
         let activity =ScriptKillRopositories.getActivity(activityCache,activityRepository,activityId);
         if(Option.isNull(activity)){
             return null;
@@ -249,8 +281,8 @@ shared(msg) actor class Drama() = this {
                 winer = k;
             }
         }
-        return winer;
-    }
+        return null;
+    };
 
 
 
