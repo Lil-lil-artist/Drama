@@ -364,13 +364,13 @@ shared(msg) actor class Drama() = this {
         var activityElectParticipaters= Option.unwrap(activity).activityElectParticipaters;
         let total = activityElectParticipaters.get(to);
         if(Option.isNull(total)){
-            total := 0
+            let a=0;
         };
         let caller =Principal.toText(msg.caller);
         var activityVoteParticipaters = Option.unwrap(activity).activityVoteParticipaters;
         var voteNum = activityVoteParticipaters.get(caller);
         if(Option.isNull(total)){
-            var totalNew=Option.unwrap(total)+num;
+            var totalNew=num;
             activityVoteParticipaters.put(to, totalNew);
             var voteNumNew=Option.unwrap(voteNum)+num;
             activityVoteParticipaters.put(caller, voteNumNew);
@@ -465,6 +465,96 @@ shared(msg) actor class Drama() = this {
         return "Hello, " # name # "!";
     };
 
+
+
+/**
+    * 获得活动数据
+     * @param 
+     * @param  ？？？
+     * @return
+    */
+
+    public type activityInfoText={
+        
+        activityId :ActivityID;  //这个Id看用什么比较好。
+        activitySponsorPrincipal:Text;  //发起者Id(钱包地址)
+        //本活动资金池
+        totalBalance :Nat64; 
+        //本活动众筹参与者（可以多人）
+        // activityParticipaters:[participater];
+
+        timestamp : Int;  //剧本杀众筹创建时间
+
+        //剧本信息
+        scriptName:Text; //剧本名称
+        scriptType:Text;//剧本类型
+        scriptDescription:Text;//剧本描
+
+        body1 :Blob;  //活动参与者转为文本显示
+        body2 :Blob;  //活动参与者转为文本显示
+        body3 :Blob;  //活动参与者转为文本显示
+
+    };
+
+
+    public query func getActivityInfo(activityId: ActivityID) : async activityInfoText {
+//    var list = "Total " # Nat.toText(balances.size()) # " hodl: \n\n" # "Principal:                                                       balances: \n";
+       
+        //  var list = "Total " # Nat.toText(1) # " hodl: \n\n" # "Principal:                                                       balances: \n";
+
+        let activity =activityMap.get(activityId);
+        // if(Option.isNull(activityInfo)){
+        //   return  null;
+
+        // };
+
+        // int i=0;
+        // var participaters:[Text,Text]=
+
+        // var list = "Total " # Nat.toText(balances.size()) # " hodl: \n\n" # "Principal:
+        var list = "Total " # Nat.toText(1) # " hodl: \n\n" # "Principal:                                                       balances: \n";
+        for ((k,v) in Option.unwrap(activity).activityParticipaters.entries()) {
+
+            list := list # k # "  " # Nat64.toText(v) # "\n";
+        };
+
+        var list2 = "Total " # Nat.toText(1) # " hodl: \n\n" # "Principal:                                                       balances: \n";
+        for ((k,v) in Option.unwrap(activity).activityElectParticipaters.entries()) {
+            list2 := list2 # k # "  " # Nat64.toText(v) # "\n";
+        };
+
+        var list3 = "Total " # Nat.toText(1) # " hodl: \n\n" # "Principal:                                                       balances: \n";
+        for ((k,v) in Option.unwrap(activity).activityVoteParticipaters.entries()) {
+            list3 := list3 # k # "  " # Nat64.toText(v) # "\n";
+        };
+
+       var activitySponsorPrincipalNew=Option.unwrap(activity).activitySponsorPrincipal;
+        var balanceNew=Option.unwrap(activity).totalBalance;
+
+        var timestampNew=Option.unwrap(activity).timestamp;
+        var scriptNamenew=Option.unwrap(activity).scriptName;
+        var scriptTypeNew=Option.unwrap(activity).scriptType;
+        var scriptDescriptionNew=Option.unwrap(activity).scriptDescription;
+
+       {
+            activityId=activityId;
+            activitySponsorPrincipal=activitySponsorPrincipalNew;
+            totalBalance=balanceNew;
+            timestamp=timestampNew;
+            scriptName=scriptNamenew;
+            scriptType=scriptTypeNew;
+            scriptDescription=scriptDescriptionNew;
+
+            body1=Text.encodeUtf8(list);
+            body2=Text.encodeUtf8(list2);
+            body3=Text.encodeUtf8(list3);
+
+       }
+        
+
+            // Iter.toArray(activityMap.entries());
+
+    };
 
 
 };
