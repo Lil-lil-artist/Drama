@@ -350,6 +350,40 @@ shared(msg) actor class Drama() = this {
     };
 
     /**
+    * 赞助者投票决定谁获得创作权V1 
+     * @param to 需要投向的庄户
+     * @param  num 票数
+     * @return
+    */
+    public shared(msg) func partivipaterVoteV1(activityId: ActivityID,to: AID.Address, num:Nat64): async Text{
+        var activity =activityMap.get(activityId);
+        if(Option.isNull(activity)){
+            return "not find activity";
+        };
+        // let toAddr =Principal.toText(to);
+        var activityElectParticipaters= Option.unwrap(activity).activityElectParticipaters;
+        let total = activityElectParticipaters.get(to);
+        if(Option.isNull(total)){
+            total := 0
+        };
+        let caller =Principal.toText(msg.caller);
+        var activityVoteParticipaters = Option.unwrap(activity).activityVoteParticipaters;
+        var voteNum = activityVoteParticipaters.get(caller);
+        if(Option.isNull(total)){
+            var totalNew=Option.unwrap(total)+num;
+            activityVoteParticipaters.put(to, totalNew);
+            var voteNumNew=Option.unwrap(voteNum)+num;
+            activityVoteParticipaters.put(caller, voteNumNew);
+        } else {
+            var totalNew=Option.unwrap(total)+num;
+            activityVoteParticipaters.put(to, totalNew);
+            activityVoteParticipaters.put(caller, num);
+        };
+        
+        Principal.toText(msg.caller);
+    };
+
+    /**
      * 获取最终投票胜出的用户
      * @param activityId 活动id
      * @return
