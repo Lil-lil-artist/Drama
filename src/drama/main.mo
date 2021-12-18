@@ -25,7 +25,7 @@ shared(msg) actor class Drama() = this {
 
     public type ActivityID=ScriptKillDomain.ActivityId;
     public type ScriptKillStruct=ScriptKillDomain.ScriptKillStruct;
-     public type UserInfo=UserDomain.UserInfo;
+    public type UserInfo=UserDomain.UserInfo;
 
     /// ID Generator
     stable var idGenerator : Nat = 1111;  //相当于数据表中Index并且是递增的。也就是说活动Id是由后端生成的。
@@ -46,13 +46,15 @@ shared(msg) actor class Drama() = this {
     // public type activtyMap=HashMap.HashMap<ActivityID,ScriptKillStruct>;
     let activityEq=ScriptKillDomain.activityEq;
     let activityHash=ScriptKillDomain.activityHash;
+    var testName = "";
+    var testMap=HashMap.HashMap<Text,Text>(0,Text.equal, Text.hash);
 
     var activityMap=HashMap.HashMap<ActivityID,ScriptKillStruct>(0,activityEq, activityHash);
     /**
      * 创建用户
      * @return
      */
-    public shared(msg) func createUser(_firstName: Text, _lastName: Text, _phone:Text,_email:Text, _personalInfo:Text):  async (Bool, Text) {
+    public shared(msg) func createUser(_firstName: Text, _lastName: Text, _phone:Text,_email:Text, _personalInfo:Text):  async UserInfo {
         let address = AID.fromPrincipal(msg.caller, null);
         let addressUserOp = users.get(address);
         var userInfo :UserInfo ={
@@ -65,17 +67,17 @@ shared(msg) actor class Drama() = this {
                 address=address;
             };
         users.put(address, userInfo);
-        return (true, "");
+        return userInfo;
     };
+
 
 
     /**
      * 获取用户信息
      * @return
      */
-    public shared(msg) func getUser(addr:Principal):  async UserInfo{
-       let address = AID.fromPrincipal(addr, null);
-       return Option.unwrap(users.get(address));
+    public shared(msg) func getUser(addr:Text):  async UserInfo{
+       return Option.unwrap(users.get(addr));
     };
 
 
@@ -104,11 +106,15 @@ shared(msg) actor class Drama() = this {
      * @return
     */
 
-    public shared(msg) func scriptSkillActivitySpon(value: Nat64,scriptName: Text,scriptType:Text,scriptDescription:Text ):  async ActivityID{
+    public shared(msg) func scriptSkillActivitySpon(value: Nat64,scriptName: Text,scriptType:Text,scriptDescription:Text ): async Nat{
+    // public shared(msg) func scriptSkillActivitySpon(value: Nat64):  async Nat{
         
         // let from_balance = _balanceOf(msg.caller);
         // let from_balance_new = from_balance - value;
         // if (from_balance_new > 0) {  //余额足够
+        // let scriptName ="111"; 
+        // let scriptType="111";
+        // let scriptDescription="111";
 
             let caller =Principal.toText(msg.caller);
 
@@ -122,7 +128,7 @@ shared(msg) actor class Drama() = this {
 
         var _activityVoteParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
         var _activityElectParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
-            var activity :ScriptKillStruct ={
+        var activity :ScriptKillStruct ={
                 activityId=activityId;
                 activitySponsorPrincipal=caller;
                 totalBalance=value;
@@ -138,7 +144,7 @@ shared(msg) actor class Drama() = this {
             };
             activityMap.put(activityId,activity);
             // activityCache :=ScriptKillRopositories.createActivity(activityCache, activityRepository, activity);
-            activityId
+            return activityId;
         // }
         // //如果钱包余额不足怎么处理，也就是执行失败怎么处理
         // 0
@@ -161,12 +167,78 @@ shared(msg) actor class Drama() = this {
 
 
     public shared(msg) func test01() : async Bool {
-       let id= scriptSkillActivitySpon(10,"1","1","1");
-        let name=activityMap.get(1111);
+    //    let id= scriptSkillActivitySpon(10,"1","1","1");
+    let name=activityMap.get(1111);
 
        true
     };
 
+
+    public shared(msg) func testGet() :async Text {
+    //    let id= scriptSkillActivitySpon(10,"1","1","1");
+       
+    //    let item=activityMap.get(1111);
+    //    let name="";
+    //    for (v in activityMap.vals()) {
+    //        vv=Option.unwrap(v)
+    //        name :=Option.unwrap(v).scriptName;
+    //    };
+       var name="";
+       let act = activityMap.get(1111);
+       if (Option.isNull(act)) {
+           return "1";
+       };
+       name := Option.unwrap(act).scriptName;
+    //    let name = Option.unwrap(act).scriptName;
+       return name;
+    };
+
+
+    public shared(msg) func testReadVar() : async Text {
+    //    let id= scriptSkillActivitySpon(10,"1","1","1");
+       
+       testName:="12123456";
+       return testName;
+    };
+
+
+    public shared(msg) func testReadMap() : async Text {
+    //    let id= scriptSkillActivitySpon(10,"1","1","1");
+       
+       testMap.put("111", "222");
+       var x=Option.unwrap(testMap.get("111"));
+       return x;
+    };
+
+    
+    public shared(msg) func testReadMap1() : async Nat64 {
+    //    let id= scriptSkillActivitySpon(10,"1","1","1");
+        var cache = HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
+       var _activityVoteParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
+       _activityVoteParticipaters.put("1111", 111);
+        var _activityElectParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
+            var activity :ScriptKillStruct ={
+                activityId=1111;
+                activitySponsorPrincipal="1";
+                totalBalance=11;
+                activityParticipaters=cache;
+                timestamp=Time.now();
+                activityVoteParticipaters=_activityVoteParticipaters;
+                activityElectParticipaters=_activityElectParticipaters;
+                scriptName="1211";
+                scriptType="scriptType";
+                scriptDescription="scriptDescription";
+            };
+            activityMap.put(111,activity);
+            let act=activityMap.get(111);
+            let activityVoteParticipaters=Option.unwrap(act).activityVoteParticipaters;
+            let num=activityVoteParticipaters.get("1111");
+            var num1 = Option.unwrap(num);
+            return num1;
+            
+    };
+
+   
 
  /// 获取当前的id，并对id+1,这是有size effects的操作
     private func getIdAndIncrementOne() : Nat {
@@ -251,14 +323,14 @@ shared(msg) actor class Drama() = this {
     public shared(msg) func partivipaterVote(activityId: ActivityID,to: AID.Address, num:Nat64): async Text{
         var activity =activityMap.get(activityId);
         if(Option.isNull(activity)){
-            return "";
+            return "not find activity";
         };
         // let toAddr =Principal.toText(to);
         var activityElectParticipaters= Option.unwrap(activity).activityElectParticipaters;
         let total = activityElectParticipaters.get(to);
         if(Option.isNull(total)){
             // 没有找到被投票人
-            return "";
+            return "no find electParticipater";
         } else {
             let caller =Principal.toText(msg.caller);
             var activityVoteParticipaters = Option.unwrap(activity).activityVoteParticipaters;
@@ -282,7 +354,7 @@ shared(msg) actor class Drama() = this {
      * @param activityId 活动id
      * @return
     */
-    public shared(msg)  func getWoteWiner(activityId:ActivityID):  async Text{
+    public shared(msg)  func getWoteWinner(activityId:ActivityID):  async Text{
         
         let activity =activityMap.get(activityId);
         if(Option.isNull(activity)){
@@ -351,13 +423,13 @@ shared(msg) actor class Drama() = this {
 
 
 
-//     public func greet(name : Text) : async Text {
-//         return "Hello, " # name # "!";
-//     };
+    public func greet(name : Text) : async Text {
+        return "Hello, " # name # "!";
+    };
 
-//    public func dojob(name : Text) : async Text {
-//         return "Hello, " # name # "!";
-//     };
+   public func dojob(name : Text) : async Text {
+        return "Hello, " # name # "!";
+    };
 
 
 
