@@ -60,4 +60,4 @@ Completely original, no similar projects on the market have been found so far.
 
 
 
-Just a demo, all design might be discussed and improved.
+(Just a demo, all design might be discussed and improved.)
