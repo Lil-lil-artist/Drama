@@ -3,6 +3,7 @@ import HashMap "mo:base/HashMap";
 import Int "mo:base/Int";
 import Nat "mo:base/Nat";
 import Text "mo:base/Text";
+import AID "./Utils/AccountId";
 
 
 //每一个剧本杀创作可以看做事一个活动的发起，下面是每一个活动所包含的基本信息。
@@ -44,13 +45,13 @@ public type ActivityPrincipal = Text;  //地址
 
         //本活动众筹参与者（可以多人）
         // activityParticipaters: HashMap.HashMap<Principal, Nat64>;
-       activityParticipaters :HashMap.HashMap<Principal, Nat64>;
+       activityParticipaters :HashMap.HashMap<AID.Address, Nat64>;
          //本活动创作申请者（可以多人）该参数不需要了，有赞助者共同创作。
         // scriptCreateResquestors:Text;
 
         //可能还需要投票的数据，成员及每个成员对应的票数！！！！
-        activityElectParticipaters :HashMap.HashMap<Principal, Nat64>;
-        activityVoteParticipaters :HashMap.HashMap<Principal, Nat64>;
+        activityElectParticipaters :HashMap.HashMap<AID.Address, Nat64>;
+        activityVoteParticipaters :HashMap.HashMap<AID.Address, Nat64>;
 
         //剧本杀消费者和活动无关，所以不需要记录相关数据
         timestamp : Timestamp;  //剧本杀众筹创建时间

@@ -32,7 +32,7 @@ shared(msg) actor class Drama() = this {
 
 
     // var activityCache = ScriptKillRopositories.newActivityCache();
-    var activityCache = HashMap.HashMap<AID.Address, Nat64>(0, AID.equal, AID.hash); //保存
+    var activityCache = HashMap.HashMap<AID.Address, ScriptKillStruct>(0, activityHash.equal, ScriptKillStruct.activityHash); //保存
     private var users = HashMap.HashMap<AID.Address, UserInfo>(1, AID.equal, AID.hash);
     
     // var activityParticipaters=HashMap.HashMap<Principal, Nat64>(0, Principal.equal, Principal.hash); //保存
@@ -241,8 +241,8 @@ shared(msg) actor class Drama() = this {
      * @param  num 票数
      * @return
     */
-    public shared(msg) func partivipaterVote(to:Principal,num:Nat): async Text{
-        let activity =ScriptKillRopositories.getActivity(activityCache,activityRepository,activityId);
+    public shared(msg) func partivipaterVote(activityId: Text,to:Principal,num:Nat): async Text{
+        let activity =activityCache.get(activityId);
         if(Option.isNull(activity)){
             return null;
         };
@@ -268,20 +268,20 @@ shared(msg) actor class Drama() = this {
      * @param activityId 活动id
      * @return
     */
-    public func getWoteWiner(activityId:ActivityID): async Text{
-        let activity =ScriptKillRopositories.getActivity(activityCache,activityRepository,activityId);
+    public func getWoteWiner(activityId:ActivityID):  Text{
+        let activity =activityCache.get(activityId);
         if(Option.isNull(activity)){
             return null;
         };
-        let maxTotal=0;
-        let winer = "";
+        var maxTotal= 0;
+        var winner = "";
         for ((k, v)  in activity.activityVoteParticipaters.entries()) {
             if (v > maxTotal ) {
-                maxTotal =  v;
-                winer = k;
+                maxTotal:= Nat64.toNat(v);
+                winner := k;
             }
-        }
-        return null;
+        };
+        return winner;
     };
 
 

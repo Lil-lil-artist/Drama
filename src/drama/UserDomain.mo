@@ -14,6 +14,5 @@ module {
         email: Text;
         personalInfo: Text;
         alias: Text;
-        avatar: Text;
     };
 };
