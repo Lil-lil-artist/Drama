@@ -9,10 +9,10 @@ import Hash "mo:base/Hash";
 import Text "mo:base/Text";
 import Option "mo:base/Option";
 
-import AID "./Utils/AccountId";
+import AID "AccountId";
 
-import ScriptKillDomain "./script_kill_create/ScriptKillDomain";
-import ScriptKillRopositories "./script_kill_create/ScriptKillRepositories";
+import ScriptKillDomain "ScriptKillDomain";
+// import ScriptKillRopositories "ScriptKillRepositories";
 
 
 // import ScriptKillActivity "./script_kill_create/ScriptKillActivity";
