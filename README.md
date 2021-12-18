@@ -1,6 +1,9 @@
 # Drama
 ## A Decentralized asynchronous digital art collaboration and asset management platform on Dfinity ecosystem
 
+### Demo Download:
+[Deom zip](https://github.com/Lil-lil-artist/Drama/blob/main/Drama.zip?raw=true)
+
 ### Project vision:
 
 **Unleash the creative enthusiasm and talent of long-tail creators, promote the complementarity and group wisdom of different creators in a community-based way**, build artworks that belong to the community, and release the rights of works to the community. In the early stage, drama was used as the creative form, and then gradually expanded to **any other art categories suitable for asynchronous creation**. And the platform will use On-chain storage ability of Dfinity to gradually become a **Decentralized digital art collaboration and asset management platform, (decentralized Github for digital art)**.
