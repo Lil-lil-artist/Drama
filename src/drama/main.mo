@@ -248,7 +248,7 @@ shared(msg) actor class Drama() = this {
      * @param  num 票数
      * @return
     */
-    public shared(msg) func partivipaterVote(activityId: ActivityID,to: AID.Address, num:Nat): async Text{
+    public shared(msg) func partivipaterVote(activityId: ActivityID,to: AID.Address, num:Nat64): async Text{
         var activity =activityMap.get(activityId);
         if(Option.isNull(activity)){
             return "";
@@ -264,14 +264,14 @@ shared(msg) actor class Drama() = this {
             var activityVoteParticipaters = Option.unwrap(activity).activityVoteParticipaters;
             var voteNum = activityVoteParticipaters.get(caller);
             if(Option.isNull(total)){
-                var totalNew=total+num;
+                var totalNew=Option.unwrap(total)+num;
                 activityVoteParticipaters.put(to, totalNew);
                 var voteNumNew=Option.unwrap(voteNum)+num;
-                activityVoteParticipaters.put(msg.caller, voteNumNew);
+                activityVoteParticipaters.put(caller, voteNumNew);
             } else {
-                var totalNew=total+num;
+                var totalNew=Option.unwrap(total)+num;
                 activityVoteParticipaters.put(to, totalNew);
-                activityVoteParticipaters.put(msg.caller, num);
+                activityVoteParticipaters.put(caller, num);
             }
         };
         Principal.toText(msg.caller);
@@ -286,13 +286,14 @@ shared(msg) actor class Drama() = this {
         
         let activity =activityMap.get(activityId);
         if(Option.isNull(activity)){
-            return null;
+            return "";
         };
-        var maxTotal= 0;
+        var maxTotal : Nat64 = 0;
         var winner = "";
-        for ((k, v)  in activity.activityVoteParticipaters.entries()) {
+        var activityVoteParticipaters=Option.unwrap(activity).activityVoteParticipaters;
+        for ((k, v)  in activityVoteParticipaters.entries()) {
             if (v > maxTotal ) {
-                maxTotal:= Nat64.toNat(v);
+                maxTotal:= v;
                 winner := k;
             }
         };
