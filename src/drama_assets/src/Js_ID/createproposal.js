@@ -1,0 +1,1 @@
+var form = document.getElementById('form');//表单

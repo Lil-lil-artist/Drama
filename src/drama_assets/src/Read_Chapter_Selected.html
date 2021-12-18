@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Base Starts here -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="Ansonika">
+  <title>BASE</title>
+
+  <!-- Favicons-->
+  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" type="image/x-icon" href="img/apple-touch-icon-57x57-precomposed.png">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="img/apple-touch-icon-72x72-precomposed.png">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="img/apple-touch-icon-114x114-precomposed.png">
+  <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="img/apple-touch-icon-144x144-precomposed.png">
+
+  <!-- Bootstrap core CSS-->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Main styles -->
+  <link href="css/admin.css" rel="stylesheet">
+  <!-- Icon fonts-->
+  <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <!-- Plugin styles -->
+  <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+  <link href="vendor/dropzone.css" rel="stylesheet">
+  <link href="css/date_picker.css" rel="stylesheet">
+  <!-- Your custom styles -->
+  <link href="css/custom.css" rel="stylesheet">
+
+</head>
+
+<body class="fixed-nav sticky-footer" id="page-top">
+  <!-- Navigation-->
+   <nav class="navbar navbar-expand-lg navbar-dark bg-default fixed-top" id="mainNav">
+    <a class="navbar-brand" href="index.html"><img src="img/logo.png" data-retina="true" alt="" width="150" height="36"></a>
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="D">
+          <a class="nav-link" href="index.html">
+            <i class="fa fa-fw fa-dashboard"></i>
+            <span class="nav-link-text">DRAMA</span>
+          </a>
+        </li>
+		<li class="nav-item" data-toggle="tooltip" data-placement="right" title="Reading_List">
+          <a class="nav-link" href="Reading_List.html">
+            <i class="fa fa-fw fa-star"></i>
+            <span class="nav-link-text">Reading List</span>
+          </a>
+        </li>
+          		<li class="nav-item" data-toggle="tooltip" data-placement="right" title="" data-original-title="Creating_List">
+          <a class="nav-link" href="Creating_List.html">
+            <i class="fa fa-fw fa-calendar-check-o"></i>
+            <span class="nav-link-text">Creating List</span>
+          </a>
+        </li>
+		<li class="nav-item" data-toggle="tooltip" data-placement="right" title="CrowdFunding_List">
+          <a class="nav-link" href="CrowdFunding_List.html">
+            <i class="fa fa-fw fa-heart"></i>
+            <span class="nav-link-text">CrowdFunding List</span>
+          </a>
+        </li>
+		<li class="nav-item" data-toggle="tooltip" data-placement="right" title="Create">
+          <a class="nav-link" href="Create_Drama.html">
+            <i class="fa fa-fw fa-plus-circle"></i>
+            <span class="nav-link-text">Create</span>
+          </a>
+        </li>
+
+
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <ul class="navbar-nav sidenav-toggler">
+        <li class="nav-item">
+          <a class="nav-link text-center" id="sidenavToggler">
+            <i class="fa fa-fw fa-angle-left"></i>
+          </a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <!---->
+
+        <li class="nav-item">
+          <form class="form-inline my-2 my-lg-0 mr-lg-2">
+            <div class="input-group">
+              <input class="form-control search-top" type="text" placeholder="Search for...">
+              <span class="input-group-btn">
+                <button class="btn btn-primary" type="button">
+                  <i class="fa fa-search"></i>
+                </button>
+              </span>
+            </div>
+          </form>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+            <i ></i>Connect Wallet</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+<!-- Base Ends here -->
+  <!-- /Navigation-->
+  <div class="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a href="#">Dashboard</a>
+        </li>
+        <li class="breadcrumb-item">
+          <a href="#">Read</a>
+        </li>
+        <li class="breadcrumb-item active">*Chapter Titles1*</li>
+      </ol>
+		<div class="box_general">
+			<div class="header_box">
+				<h2 class="d-inline-block" id="ChapterTitles">*Chapter number: 1* *Chapter Titles1*</h2>
+			</div>
+			<div class="list_general">
+              <small id="ChapterStatus">√ Completed</small><br/>
+              <small id="ElectedAuthor">Author: ......</small>
+						<p id="ChapterContent">
+                            这个夏天，我见思特里克兰德太太的次数不少。我时不时会去她的公寓参加愉快的小型午餐会，还有场面热闹得多的茶会。我们互生好感。那时，我还很年轻，或许她愿意引领我稚嫩的脚步踏上艰难的文学之路。而我，有了什么小烦恼，也乐于找个人倾诉一下，而且我确信她会凝神倾听，并给出合理的忠告。思特里克兰德太太天生富有同情心。这是一种迷人的能力，但这种能力往往会被意识到自己有这种能力的人滥用：他们会贪婪地抓住朋友的不幸以显示自己的聪明，这种贪婪令人毛骨悚然。同情心就像井喷，同情者恣意表达同情，有时会令受害者尴尬。有的人的胸口洒了太多泪，我就不用我的泪水去沾湿了吧。思特里克兰德太太老练地运用自己的长处。你会觉得，接受她的同情反倒帮了她的忙。年轻的我热情洋溢，跟罗斯·沃特福德谈论此事时，她说：
+
+                            “牛奶很好喝，尤其是加上一滴白兰地，但奶牛巴不得把奶挤出去。肿胀的乳房很不舒服。”
+
+                             罗斯·沃特福德赤口毒舌。没有人能说出如此尖刻的话，同时也没有人做事比她更漂亮。
+
+                             思特里克兰德太太还有一点我很喜欢。她把生活环境布置得很优雅。她的公寓永远整洁舒适，摆着艳丽的鲜花，客厅的印花棉布尽管图案朴素，但明亮美丽。在雅致的小餐厅用餐很惬意，桌子很漂亮，两个女仆穿戴齐整、容貌秀丽，饭菜也可口。不可能看不出思特里克兰德太太是个出色的主妇。而且我确信，她是一位极好的母亲。客厅里摆着她的一双儿女的照片。儿子叫罗伯特，十六岁，在拉格比读书。照片上的他身穿法兰绒衣服，头戴板球帽，在另一张照片上，他穿的是燕尾服，竖领。他同母亲一样，眉清目秀，目光沉思，神色坦诚。他看上去干净、健康、正常。
+
+                             “我觉得他不太聪明，”有一天，我正看照片时，她说，“但我知道，他是个好孩子。他的性格很可爱。”
+
+                             女儿十四岁。和母亲一样，一头浓密的黑发披在肩上，同样表情友善，眼神庄重平静。
+
+                             “他们两个长得很像你。”我说。
+
+                             “是啊，我想，他们都更像我，不随他们的父亲。”
+
+                              “你为什么不让我见见他？”我问。
+
+                              “你想见他吗？”
+
+                              她笑了，她的笑容真的很甜，脸微微泛红。这个年纪的女人还这么容易脸红不常见。或许纯真是她最大的魅力。
+
+                              “你知道，他根本不懂文学，”她说，“他是个十足的俗人。”
+
+                               她这么说毫无贬低之意，反倒充满深情，她好像希望通过承认他最差的一面，来保护他免受朋友诽谤。
+
+                               “他在证券交易所做事，是一个典型的掮客。我想他会把你烦死的。”
+
+                               “你烦他吗？”我问。
+
+                                “你知道，我恰巧是他的妻子。我很喜欢他。”
+
+                                 她用微笑掩饰羞涩，我猜，她担心我说出什么嘲笑的话，听到她如此坦白，换作罗斯·沃特福德，免不了要挖苦几句。她踌躇了一会儿，眼神变得越发温柔。
+
+                                “他不装什么天才。就连在证券交易所，他也赚不了多少钱。但他非常善良。”
+
+                                 “我想我会很喜欢他。”
+
+                                 “改天我请你和我们一起安安静静地吃顿晚饭，不过，丑话说在前头，你来的话，后果可要自负，如果那天晚上你感觉很无聊，可千万别怪我。”
+                        </p>
+			</div>
+		</div>
+		<!-- /box_general-->
+		<nav aria-label="...">
+			<ul class="pagination pagination-sm add_bottom_30">
+				<li class="page-item disabled">
+					<a class="page-link" href="#" tabindex="-1">Previous</a>
+				</li>
+				<li class="page-item"><a class="page-link" href="#">1</a></li>
+				<li class="page-item"><a class="page-link" href="#">2</a></li>
+				<li class="page-item"><a class="page-link" href="#">3</a></li>
+				<li class="page-item">
+					<a class="page-link" href="#">Next page</a>
+				</li>
+			</ul>
+		</nav>
+		<!-- /pagination-->
+	  </div>
+	  <!-- /container-fluid-->
+   	</div>
+    <!-- /container-wrapper-->
+    <footer class="sticky-footer">
+      <div class="container">
+        <div class="text-center">
+          <small>Copyright © DRAMA 2021</small>
+        </div>
+      </div>
+    </footer>
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fa fa-angle-up"></i>
+    </a>
+    <!-- Logout Modal-->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+          <div class="modal-footer">
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+            <a class="btn btn-primary" href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+    <!-- Page level plugin JavaScript-->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+    <script src="vendor/datatables/jquery.dataTables.js"></script>
+    <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+	<script src="vendor/jquery.selectbox-0.2.js"></script>
+	<script src="vendor/retina-replace.min.js"></script>
+	<script src="vendor/jquery.magnific-popup.min.js"></script>
+    <!-- Custom scripts for all pages-->
+    <script src="js/admin.js"></script>
+
+</body>
+</html>

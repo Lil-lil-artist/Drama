@@ -1,0 +1,35 @@
+{
+  "canisters": {
+    "phili_h": {
+      "main": "src/phili_h/main.mo",
+      "type": "motoko"
+    },
+    "phili_h_assets": {
+      "dependencies": [
+        "phili_h"
+      ],
+      "frontend": {
+        "entrypoint": "src/phili_h_assets/src/index.html"
+      },
+      "source": [
+        "src/phili_h_assets/assets",
+        "dist/phili_h_assets/"
+      ],
+      "type": "assets"
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "dfx": "0.8.3",
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:8000",
+      "type": "ephemeral"
+    }
+  },
+  "version": 1
+}
