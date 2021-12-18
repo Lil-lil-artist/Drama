@@ -10,7 +10,7 @@ import Text "mo:base/Text";
 import Option "mo:base/Option";
 
 import AID "./Utils/AccountId";
-import User "./UserDomain";
+import UserDomain "./UserDomain";
 
 import ScriptKillDomain "./ScriptKillDomain";
 // import ScriptKillRopositories "./ScriptKillRepositories";
@@ -32,7 +32,7 @@ shared(msg) actor class Drama() = this {
 
 
     // var activityCache = ScriptKillRopositories.newActivityCache();
-    var activityCache = HashMap.HashMap<AID.Address, ScriptKillStruct>(0, activityHash.equal, ScriptKillStruct.activityHash); //保存
+    // var activityCache = HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash); //保存
     private var users = HashMap.HashMap<AID.Address, UserInfo>(1, AID.equal, AID.hash);
     
     // var activityParticipaters=HashMap.HashMap<Principal, Nat64>(0, Principal.equal, Principal.hash); //保存
@@ -62,8 +62,9 @@ shared(msg) actor class Drama() = this {
                 email=_email;
                 personalInfo=_personalInfo;
                 createTime=Time.now();
+                address=address;
             };
-        users.put(address,userInfo);
+        users.put(address, userInfo);
         return (true, "");
     };
 
@@ -74,7 +75,7 @@ shared(msg) actor class Drama() = this {
      */
     public shared(msg) func getUser(addr:Principal):  async UserInfo{
        let address = AID.fromPrincipal(addr, null);
-       users.get(address);
+       return Option.unwrap(users.get(address));
     };
 
 
@@ -119,6 +120,8 @@ shared(msg) actor class Drama() = this {
 
             // let pa
 
+        var _activityVoteParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
+        var _activityElectParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
             var activity :ScriptKillStruct ={
                 activityId=activityId;
                 activitySponsorPrincipal=caller;
@@ -126,6 +129,8 @@ shared(msg) actor class Drama() = this {
                 activityParticipaters=cache;
                 timestamp=Time.now();
 
+                activityVoteParticipaters=_activityVoteParticipaters;
+                activityElectParticipaters=_activityElectParticipaters;
                 scriptName=scriptName;
                 scriptType=scriptType;
                 scriptDescription=scriptDescription;
@@ -201,14 +206,16 @@ shared(msg) actor class Drama() = this {
         var scriptNamenew=Option.unwrap(activity).scriptName;
         var scriptTypeNew=Option.unwrap(activity).scriptType;
         var scriptDescriptionNew=Option.unwrap(activity).scriptDescription;
-
+        var _activityVoteParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
+        var _activityElectParticipaters=HashMap.HashMap<AID.Address, Nat64>(1, AID.equal, AID.hash);
         var activityNew :ScriptKillStruct={
                 activityId=activityId;
                 activitySponsorPrincipal=activitySponsorPrincipalNew;
                 totalBalance=balanceNew;
                 activityParticipaters=cacheNew;
                 timestamp=timestampNew;
-
+                activityElectParticipaters=_activityElectParticipaters;
+                activityVoteParticipaters=_activityVoteParticipaters;
                 scriptName=scriptNamenew;
                 scriptType=scriptTypeNew;
                 scriptDescription=scriptDescriptionNew;
@@ -241,23 +248,30 @@ shared(msg) actor class Drama() = this {
      * @param  num 票数
      * @return
     */
-    public shared(msg) func partivipaterVote(activityId: Text,to:Principal,num:Nat): async Text{
-        let activity =activityCache.get(activityId);
+    public shared(msg) func partivipaterVote(activityId: ActivityID,to: AID.Address, num:Nat): async Text{
+        var activity =activityMap.get(activityId);
         if(Option.isNull(activity)){
-            return null;
+            return "";
         };
-        let total = activity.activitElectParticipaters.get(to);
+        // let toAddr =Principal.toText(to);
+        var activityElectParticipaters= Option.unwrap(activity).activityElectParticipaters;
+        let total = activityElectParticipaters.get(to);
         if(Option.isNull(total)){
             // 没有找到被投票人
-            return null;
+            return "";
         } else {
-        let voteNum = activity.activitVoteParticipaters.get(msg.caller);
+            let caller =Principal.toText(msg.caller);
+            var activityVoteParticipaters = Option.unwrap(activity).activityVoteParticipaters;
+            var voteNum = activityVoteParticipaters.get(caller);
             if(Option.isNull(total)){
-                activity.activityVoteParticipaters.put(to, Option.unwrap(total)+total)
-                activity.activityElectParticipaters.put(msg.caller, Option.unwrap(voteNum)+num)
+                var totalNew=total+num;
+                activityVoteParticipaters.put(to, totalNew);
+                var voteNumNew=Option.unwrap(voteNum)+num;
+                activityVoteParticipaters.put(msg.caller, voteNumNew);
             } else {
-                activity.activityVoteParticipaters.put(to, Option.unwrap(total)+num)
-                activity.activityElectParticipaters.put(msg.caller, num)
+                var totalNew=total+num;
+                activityVoteParticipaters.put(to, totalNew);
+                activityVoteParticipaters.put(msg.caller, num);
             }
         };
         Principal.toText(msg.caller);
@@ -268,8 +282,9 @@ shared(msg) actor class Drama() = this {
      * @param activityId 活动id
      * @return
     */
-    public func getWoteWiner(activityId:ActivityID):  Text{
-        let activity =activityCache.get(activityId);
+    public shared(msg)  func getWoteWiner(activityId:ActivityID):  async Text{
+        
+        let activity =activityMap.get(activityId);
         if(Option.isNull(activity)){
             return null;
         };

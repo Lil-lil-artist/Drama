@@ -7,12 +7,10 @@ module {
     public type UserInfo = {
         address: AID.Address;
         createTime: Time.Time;
-        name: Text;
         firstName: Text;
         lastName: Text;
         phone: Text;
         email: Text;
         personalInfo: Text;
-        alias: Text;
     };
 };
