@@ -1,19 +1,19 @@
 {
   "canisters": {
-    "phili_h": {
-      "main": "src/phili_h/main.mo",
+    "drama": {
+      "main": "src/drama/main.mo",
       "type": "motoko"
     },
-    "phili_h_assets": {
+    "drama_assets": {
       "dependencies": [
-        "phili_h"
+        "drama"
       ],
       "frontend": {
-        "entrypoint": "src/phili_h_assets/src/index.html"
+        "entrypoint": "src/drama_assets/src/index.html"
       },
       "source": [
-        "src/phili_h_assets/assets",
-        "dist/phili_h_assets/"
+        "src/drama_assets/assets",
+        "dist/drama_assets/"
       ],
       "type": "assets"
     }
@@ -24,7 +24,7 @@
       "packtool": ""
     }
   },
-  "dfx": "0.8.3",
+  "dfx": "0.8.4",
   "networks": {
     "local": {
       "bind": "127.0.0.1:8000",
